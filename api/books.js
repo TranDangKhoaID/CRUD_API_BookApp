@@ -55,6 +55,54 @@ app.get('/api/chapters', (req, res) => {
     }
   });
 });
+//thêm chương
+app.post('/api/chapters', (req, res) => {
+  const { book_id, chapter_number, title, content } = req.body;
+
+  // Kiểm tra các trường thông tin được gửi lên từ client
+  if (!book_id || !chapter_number || !title || !content) {
+    res.status(400).json({ error: 'Missing required fields' });
+    return;
+  }
+
+  // Tạo câu truy vấn INSERT INTO để thêm chương mới vào cơ sở dữ liệu
+  const query = 'INSERT INTO chapters (book_id, chapter_number, title, content) VALUES (?, ?, ?, ?)';
+  const values = [book_id, chapter_number, title, content];
+
+  // Thực hiện truy vấn cơ sở dữ liệu
+  connection.query(query, values, (err, results) => {
+    if (err) {
+      console.error('Error executing database query:', err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      // Trả về kết quả cho ứng dụng React Native
+      res.json({ message: 'Chapter added successfully' });
+    }
+  });
+});
+//xóa chương
+app.delete('/api/chapters/:id', (req, res) => {
+  const chapterId = req.params.id;
+
+  // Tạo câu truy vấn DELETE để xóa chương dựa trên ID
+  const query = 'DELETE FROM chapters WHERE id = ?';
+
+  // Thực hiện truy vấn cơ sở dữ liệu
+  connection.query(query, [chapterId], (err, results) => {
+    if (err) {
+      console.error('Error executing database query:', err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      // Kiểm tra xem có bản ghi nào bị xóa hay không
+      if (results.affectedRows > 0) {
+        res.json({ message: 'Chapter deleted successfully' });
+      } else {
+        res.status(404).json({ error: 'Chapter not found' });
+      }
+    }
+  });
+});
+
 //lấy ds chapters theo book_id:
 app.get('/api/books/:book_id/chapters', (req, res) => {
   // Lấy book_id từ route parameter
@@ -137,43 +185,58 @@ app.post('/api/books/:book_id/comments', (req, res) => {
 //thêm books mới
 // Định nghĩa endpoint API để thêm sách mới
 app.post('/api/books', (req, res) => {
-    const { title, author, genre, description, cover_image } = req.body;
-    const query = 'INSERT INTO Books (title, author, genre, description, cover_image) VALUES (?, ?, ?, ?, ?)';
-    const values = [title, author, genre, description, cover_image];
-  
-    connection.query(query, values, (err, result) => {
-      if (err) {
-        console.error('Error executing database query:', err);
-        res.status(500).json({ error: 'Internal Server Error' });
-      } else {
-        res.json({ id: result.insertId, title, author, genre, description, cover_image });
-      }
-    });
-});
-//xóa sách
+  const { title, author, genre, description, cover_image } = req.body;
+  const query = 'INSERT INTO Books (title, author, genre, description, cover_image) VALUES (?, ?, ?, ?, ?)';
+  const values = [title, author, genre, description, cover_image];
 
+  connection.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error executing database query:', err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.json({ id: result.insertId, title, author, genre, description, cover_image });
+    }
+  });
+});
 // Xóa sách từ cơ sở dữ liệu
 app.delete('/api/books/:id', (req, res) => {
-    const bookId = req.params.id;
-    const query = 'DELETE FROM books WHERE id = ?';
-    
-    connection.query(query, [bookId], (err, result) => {
-      if (err) {
-        console.error('Error executing database query:', err);
-        res.status(500).json({ error: 'Internal Server Error' });
+  const bookId = req.params.id;
+  const query = 'DELETE FROM books WHERE id = ?';
+
+  connection.query(query, [bookId], (err, result) => {
+    if (err) {
+      console.error('Error executing database query:', err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      if (result.affectedRows === 0) {
+        // Không tìm thấy sách có id tương ứng
+        res.status(404).json({ error: 'Book not found' });
       } else {
-        if (result.affectedRows === 0) {
-          // Không tìm thấy sách có id tương ứng
-          res.status(404).json({ error: 'Book not found' });
-        } else {
-          // Xóa sách thành công
-          res.json({ message: 'Book deleted successfully' });
-        }
+        // Xóa sách thành công
+        res.json({ message: 'Book deleted successfully' });
       }
-    });
+    }
   });
-  
-  
+});
+//update sách
+app.put('/api/books/:id', (req, res) => {
+  const bookId = req.params.id;
+  const { title, author, genre, description, cover_image } = req.body;
+  const query = 'UPDATE Books SET title = ?, author = ?, genre = ?, description = ?, cover_image = ? WHERE id = ?';
+  const values = [title, author, genre, description, cover_image, bookId];
+
+  connection.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error executing database query:', err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else if (result.affectedRows === 0) {
+      res.status(404).json({ error: 'Book not found' });
+    } else {
+      res.json({ id: bookId, title, author, genre, description, cover_image });
+    }
+  });
+});
+
 // Khởi động server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

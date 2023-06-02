@@ -4,8 +4,10 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import FlatListBook from '../component/FlatListBook';
 
 
-const Books = () => {
+const Books = ({navigation}) => {
   const [books, setBooks] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+  
 
   useEffect(() => {
     fetch('http://192.168.1.7:3001/api/books')
@@ -19,16 +21,17 @@ const Books = () => {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <View style={{ flex: 1 }}>
       <FlatList
         data={books}
         style={{ flex: 1 }}
         renderItem={({ item }) => {
-          return <FlatListBook item={item} />;
+          return <FlatListBook item={item} navigation={navigation} />;
         }}
+        keyExtractor={(item) => item.id.toString()} // Using id as the key
       />
-    </SafeAreaView>
-  )
+    </View>
+  );
 }
 
 export default Books

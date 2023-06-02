@@ -3,11 +3,11 @@ import React from 'react'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import { Alert } from 'react-native';
 
-const handleDeleteBook = (id) => {
+const handleDeleteChapter = (id) => {
     // Hiển thị cảnh báo xác nhận trước khi xóa sách
     Alert.alert(
         'Xác nhận',
-        'Bạn có chắc chắn muốn xóa sách này?',
+        'Bạn có chắc chắn muốn xóa chương này?',
         [
             {
                 text: 'Hủy',
@@ -18,7 +18,7 @@ const handleDeleteBook = (id) => {
                 style: 'destructive',
                 onPress: () => {
                     // Gửi yêu cầu DELETE đến API để xóa sách
-                    fetch(`http://192.168.1.7:3001/api/books/${id}`, {
+                    fetch(`http://192.168.1.7:3001/api/chapters/${id}`, {
                         method: 'DELETE',
                     })
                         .then(response => response.json())
@@ -38,31 +38,15 @@ const handleDeleteBook = (id) => {
     );
 };
 
-
-const FlatListBook = ({ item,navigation }) => {
+const FlatListChapter = ({ item, navigation }) => {
     return (
         <View style={styles.listItem}>
-          <View style={{ flex: 1, paddingHorizontal: 10 }}>
-            <Image style={{ flex: 3 }} source={{ uri: item.cover_image }} />
-          </View>
           <View style={{ alignItems: 'flex-start', flex: 4 }}>
-            <Text style={{ color: '#000' }}>Tiêu đề: {item.title}</Text>
-            <Text style={{ color: '#000' }}>Tác giả: {item.author}</Text>
-            <Text style={{ color: '#000' }}>Thể loại: {item.genre}</Text>
-            <Text style={{ color: '#000' }}>Số chương: {item.chapters}</Text>
+            <Text style={{ color: '#000' }}>Chương: {item.chapter_number}</Text>
+            <Text style={{ color: '#000' }}>{item.title}</Text>
           </View>
           <View style={{ flex: 1, paddingHorizontal: 10, alignItems: 'center', justifyContent: 'center' }}>
-            <TouchableOpacity  onPress={() => navigation.navigate('Chapters', { id : item.id })}>
-              <FontAwesomeIcon name="book" size={30} color="green" />
-            </TouchableOpacity>
-          </View>
-          <View style={{ flex: 1, paddingHorizontal: 10, alignItems: 'center', justifyContent: 'center' }}>
-            <TouchableOpacity onPress={() => navigation.navigate('EditBook', { book: item })}>
-              <FontAwesomeIcon name="edit" size={30} color="blue" />
-            </TouchableOpacity>
-          </View>
-          <View style={{ flex: 1, paddingHorizontal: 10, alignItems: 'center', justifyContent: 'center' }}>
-            <TouchableOpacity onPress={() => handleDeleteBook(item.id)}>
+          <TouchableOpacity onPress={() => handleDeleteChapter(item.id)}>
               <FontAwesomeIcon name="trash" size={30} color="red" />
             </TouchableOpacity>
           </View>
@@ -71,17 +55,17 @@ const FlatListBook = ({ item,navigation }) => {
 }
 
 
-export default FlatListBook
+export default FlatListChapter
 
 const styles = StyleSheet.create({
     listItem: {
         flex: 1,
         margin: 5,
         padding: 20,
-        borderColor: '#f50057',
+        borderColor: 'blue',
         borderWidth: 2,
         flexDirection: 'row',
         borderRadius: 20,
-        backgroundColor: "pink",
+        backgroundColor: "#A6D4FF",
     },
 })

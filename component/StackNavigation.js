@@ -5,6 +5,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Home from '../screens/Home';
 import AddBook from '../screens/AddBook';
 import Books from '../screens/Books';
+import EditBook from '../screens/EditBook';
+import Chapters from '../screens/Chapters';
+import AddChapter from '../screens/AddChapter';
 const forFade = ({ current, next }) => {
   const opacity = Animated.add(
     current.progress,
@@ -43,6 +46,21 @@ function MyStack() {
       <Stack.Screen
         name="Books"
         component={Books}
+        options={{ headerStyleInterpolator: forFade }}
+      />
+      <Stack.Screen
+        name="EditBook"
+        component={EditBook}
+        options={{ headerStyleInterpolator: forFade }}
+      />
+      <Stack.Screen
+        name="Chapters"
+        component={Chapters}
+        options={{ headerStyleInterpolator: forFade }}
+      />
+      <Stack.Screen
+        name="AddChapter"
+        component={AddChapter}
         options={{ headerStyleInterpolator: forFade }}
       />
     </Stack.Navigator>
