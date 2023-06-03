@@ -36,15 +36,37 @@ const ChartBook = () => {
             });
     }, []);
     return (
-        <View>
-            <Text>Thống kê sách</Text>
-            <Text>Số lượng sách: {books.length}</Text>
-            <Text>Số lượng người dùng: {users.length}</Text>
-            <Text>Số lượng chương: {chapters.length}</Text>
+        <View style={styles.container}>
+            <View style={styles.box}>
+                <Text style={styles.text_1}>Số lượng sách</Text>
+                <Text>{books.length}</Text>
+            </View>
+            <View style={styles.box}>
+                <Text>Số lượng nguời dùng</Text>
+                <Text>{users.length}</Text>
+            </View>
+            <View style={styles.box}>
+                <Text>Số lượng chương</Text>
+                <Text>{chapters.length}</Text>
+            </View>
         </View>
     )
 }
 
 export default ChartBook
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    container:{
+        flex: 1,
+        justifyContent: 'space-around',
+        alignItems: 'center',
+    },
+    box:{
+        margin: 10,
+        backgroundColor: 'red',
+        alignItems: 'center',
+        padding: 25,
+        borderRadius: 20,
+    },
+    
+})

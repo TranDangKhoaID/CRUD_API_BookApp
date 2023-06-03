@@ -9,7 +9,7 @@ const Home = ({ navigation }) => {
         <Text style={{color: '#FFF', fontSize: 20}}>SÁCH</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('StatisticBook')} style={styles.btn}>
-        <Text style={{color: '#FFF', fontSize: 20}}>THỐNG KÊ SÁCH</Text>
+        <Text style={{color: '#FFF', fontSize: 20}}>THỐNG KÊ</Text>
       </TouchableOpacity>
     </SafeAreaView>
   )
