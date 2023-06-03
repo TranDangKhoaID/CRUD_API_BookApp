@@ -4,6 +4,7 @@ import Home from './screens/Home';
 import AddBook from './screens/AddBook';
 import StackNavigation from './component/StackNavigation';
 import Books from './screens/Books';
+import ChartBook from './screens/ChartBook';
 
 export default function App() {
   return (

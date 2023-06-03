@@ -236,6 +236,25 @@ app.put('/api/books/:id', (req, res) => {
     }
   });
 });
+//rating update
+app.put('/api/books/:id/rating', (req, res) => {
+  const bookId = req.params.id;
+  const { rating } = req.body;
+  const query = 'UPDATE Books SET rating = ? WHERE id = ?';
+  const values = [rating, bookId];
+
+  connection.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error executing database query:', err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else if (result.affectedRows === 0) {
+      res.status(404).json({ error: 'Book not found' });
+    } else {
+      res.json({ id: bookId, rating });
+    }
+  });
+});
+
 
 // Khởi động server
 app.listen(port, () => {

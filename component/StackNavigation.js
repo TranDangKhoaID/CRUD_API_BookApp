@@ -8,6 +8,7 @@ import Books from '../screens/Books';
 import EditBook from '../screens/EditBook';
 import Chapters from '../screens/Chapters';
 import AddChapter from '../screens/AddChapter';
+import ChartBook from '../screens/ChartBook';
 const forFade = ({ current, next }) => {
   const opacity = Animated.add(
     current.progress,
@@ -61,6 +62,11 @@ function MyStack() {
       <Stack.Screen
         name="AddChapter"
         component={AddChapter}
+        options={{ headerStyleInterpolator: forFade }}
+      />
+      <Stack.Screen
+        name="StatisticBook"
+        component={ChartBook}
         options={{ headerStyleInterpolator: forFade }}
       />
     </Stack.Navigator>

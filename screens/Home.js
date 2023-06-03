@@ -8,8 +8,8 @@ const Home = ({ navigation }) => {
       <TouchableOpacity onPress={() => navigation.navigate('AddBook')} style={styles.btn}>
         <Text style={{color: '#FFF', fontSize: 20}}>SÁCH</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={()=>{}} style={styles.btn}>
-        <Text style={{color: '#FFF', fontSize: 20}}>THÊM CHƯƠNG</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('StatisticBook')} style={styles.btn}>
+        <Text style={{color: '#FFF', fontSize: 20}}>THỐNG KÊ SÁCH</Text>
       </TouchableOpacity>
     </SafeAreaView>
   )
